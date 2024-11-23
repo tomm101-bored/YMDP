@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Mini Draw Page (YMDP)</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    canvas {
+      border: 1px solid #000;
+      cursor: crosshair;
+    }
+    .toolbar {
+      margin: 10px;
+    }
+    .toolbar button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+    .toolbar button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Mini Draw Page (YMDP)</h1>
+  <div class="toolbar">
+    <button style="background-color: red;" onclick="setColor('red')">Red</button>
+    <button style="background-color: green;" onclick="setColor('green')">Green</button>
+    <button style="background-color: blue;" onclick="setColor('blue')">Blue</button>
+    <button style="background-color: yellow;" onclick="setColor('yellow')">Yellow</button>
+    <button style="background-color: black; color: white;" onclick="setColor('black')">Black</button>
+    <button onclick="setColor('white')">Eraser</button>
+  </div>
+  <canvas id="paintCanvas" width="800" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById('paintCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let painting = false;
+    let currentColor = 'black';
+
+    // Start painting
+    function startPainting(e) {
+      painting = true;
+      draw(e);
+    }
+
+    // Stop painting
+    function stopPainting() {
+      painting = false;
+      ctx.beginPath();
+    }
+
+    // Set the current color
+    function setColor(color) {
+      currentColor = color;
+    }
+
+    // Draw on the canvas
+    function draw(e) {
+      if (!painting) return;
+
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = currentColor;
+
+      ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    }
+
+    // Event listeners
+    canvas.addEventListener('mousedown', startPainting);
+    canvas.addEventListener('mouseup', stopPainting);
+    canvas.addEventListener('mousemove', draw);
+  </script>
+</body>
+</html>
